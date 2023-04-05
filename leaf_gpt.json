@@ -1,0 +1,3402 @@
+openapi: 3.0.0
+info:
+  title: Leaf API
+  description: |-
+    Leaf API Postman Collection
+
+
+    - Import Postman Collection
+    - Import Environment Variables
+    - Register with Leaf 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    Version 0.0.1
+  version: 1.0.0
+servers:
+  - url: https://{{leaf_api_url}}
+  - url: https://{{leaf_auth_jd}}
+  - url: https://{{leaf_auth_cfv}}
+  - url: https://api.climate.com
+  - url: https://{{leaf_auth_cnhi}}
+  - url: https://{{leaf_auth_raven}}
+  - url: https://v2apitelemetria.telemetriastara.com.br
+  - url: https://{{leaf_auth_trimble}}
+components:
+  securitySchemes:
+    noauthAuth:
+      type: http
+      scheme: noauth
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - bearerAuth: []
+tags:
+  - name: Quickstart
+    description: "Leaf Auth\nGet Leaf Token\nAfter registering with Leaf, you can get your Leaf token, which must be included in all requests to Leaf’s API as an authorization header.\n\tHow to get your Leaf Token:\nUpdate current value of \"leaf_email\" variable to your Leaf account email\nUpdate current value of \"leaf_pass\" variable to your Leaf account password\nHit \"Send\"\n\nAn \"id_token\" should be returned. It will be automatically transferred to the current value of \"leaf_token\" to be used in all calls to Leaf's API"
+  - name: API Reference
+  - name: API Reference > Leaf auth
+    description: "Leaf Auth\nGet Leaf Token\nAfter registering with Leaf, you can get your Leaf token, which must be included in all requests to Leaf’s API as an authorization header.\n\tHow to get your Leaf Token:\nUpdate current value of \"leaf_email\" variable to your Leaf account email\nUpdate current value of \"leaf_pass\" variable to your Leaf account password\nHit \"Send\"\n\nAn \"id_token\" should be returned. It will be automatically transferred to the current value of \"leaf_token\" to be used in all calls to Leaf's API"
+  - name: API Reference > Providers auth
+  - name: API Reference > Providers auth > JohnDeere auth
+    description: >
+      John Deere Auth
+
+      To get a better sense of the authentication process with John Deere and
+      the results, check our Medium Post
+      (https://medium.com/leaf-agriculture/how-to-use-leafs-api-to-retrieve-machinery-data-from-john-deere-fb1ba331d089)
+
+      1. Get John Deere auth URL
+
+      In Step 1 we will be generating tokens from John Deere. The goal In step 2
+      is we will get our john deere token_id and token_secret
+
+
+      Token Verifier
+
+      In step 1 we will get a temporary "token verifier" from John Deere that
+      confirms a user’s authentication of your application to access their John
+      Deere data and generate credentials. We get that verifier by going through
+      their authentication flow (oauth2).
+
+      Before generating the authentication URL, please:
+
+      Update current value of "jd_client_key" to your app's client key on John
+      Deere
+
+      Update current value of "jd_client_secret" to your app's client secret on
+      John Deere
+
+      Update current value of "jd_callback_url" to your app's callback_url on
+      John Deere
+
+
+      Then, to generate the authentication URL your application will send to
+      your user so they can authorize access to their account files you can use
+      the included step 2 in the Postman Collection. Change "client_key" and
+      "client_secret" variables to yours received from John Deere when you
+      created an app on your developer account with them and redirect_uri to a
+      uri the "token verifier" will be sent after the user authorizes your
+      application.
+
+      Hit "Send".
+
+      Redirect your user to the url included in the response.
+
+      They will authenticate and be redirected to the redirect_url
+
+      Copy the entire url you were redirected to. It looks like:
+
+      https://leafagriculture.com.br/?oauth_token=TOKEN&oauth_verifier=CODE
+
+      Paste it in the environment variable "jd_response_url"
+
+      2. Get John Deere Tokens
+
+      After updating the “jd_response_url” in Postman you can submit your
+      credentials and receive your tokens:
+
+      Hit "Send"
+
+
+      "token_id" and "token_secret_key" will be automatically transferred to
+      "jd_token_id" and "jd_token_secret" environment variables and will be used
+      in the next step.
+
+
+      3. Add John Deere ID
+
+      Now we can create a Developer-User pair credentials ID that will allow you
+      to access your user’s John Deere data. We first add the John Deere
+      credentials to Leaf API, just:
+
+      Hit "Send"
+
+      All the info needed has already been filled automatically in Step 2.
+
+
+      An "id" for the credentials you just created will be returned. This "id"
+      will be automatically transferred to the value of "jd_credentials_id" to
+      be used in the next step.
+  - name: API Reference > Providers auth > ClimateFieldView auth
+    description: "Climate Field View Auth\nTo get a better sense of the authentication process with Climate Field View and the results, check our Medium Post (https://medium.com/leaf-agriculture/how-to-use-leafs-api-to-retrieve-machinery-data-from-climate-fieldview-dda921f40291)\n\n1. Get CFV auth URL\nWe will be generating a url to redirect your user to authenticate with Climate.\nUpdate environment variables \"cfv_client_id\" and \"cfv_client_secret\" to your CFV developer account credentials\nUpdate environment variable \"cfv_redirect_url\" to your application's backend\nRedirect your user to the script's output url.\nThey will authenticate and be redirected to the redirect_uri\nA code will be sent to that cfv_redirect_url. We will need this code Step 2.\nCopy the code value \nNote: this code expires after 1 minute.\n\nPaste code value to environment variable \"cfv_code\"\n\n2. Get CFV tokens\nHit \"Send\"\n\nA lot of information will be returned. The important ones are \"access_token\" and \"refresh_token. These will be automatically transferred to \"cfv_access_token\" and \"cfv_refresh_token\" environment variables and will be used in the next step.\n\t\n3. Add CFV credentials\nNow we can create a Developer-User pair credentials ID that will allow you to access your user’s Climate data. We first add the Climate credentials to Leaf API, to do that:\nHit \"Send\"\n\nAn \"id\" for the credentials you just created will be returned. This \"id\" will be automatically transferred to the value of \"cfv_credentials_id\" to be used in the next step."
+  - name: API Reference > Providers auth > CNHi auth
+  - name: API Reference > Providers auth > Raven auth
+  - name: API Reference > Providers auth > Stara auth
+  - name: API Reference > Providers auth > Trimble auth
+  - name: API Reference > Leaf User
+    description: "Leaf User \t\nCreate Leaf User\nNow we have to attach credentials to a Leaf User. To do so, we can create a Leaf user and attach our John Deere and/or Climate Field View credentials via the credentials id. We can also attach credentials from other companies to this same user to query all available data by Grower/Farm/Field regardless of brand. \nUpdate (optional) fields \"address\", \"email\", \"name\" and \"phone\" with your user's information.\nWe have automatically included our “jd_credentials_id” to this call and attached it to this user.\nHit \"Send\" \n\n\tAlong with other information returned, there is an \"id\". This \"id\" is the leaf_user_id that will be used in the next (final) Step to query and access files.\n\nUpdate Leaf User\n\tTo update a Leaf User, let's say to add another provider credentials or change the user's address, we can use this PUT request. Since this method overwrites, remember to send all the user's information along with the information you want to add or update. For example, if you want to add John Deere credentials to a user that already has ClimateFieldView credentials, remember to specify both credentials ids.\n\nGet specific Leaf User\n\tWith this endpoint you can query all information on a specific Leaf User, such as their address, email, credentials, etc. To do so, update the value of the environment variable \"leaf_user_id\" to the Leaf User id you want to query.\n\nGet all Leaf Users\n\tWith this endpoint you can query all information on all your Leaf Users, such as their address, email, credentials, etc. Just hit 'send'.\n\n"
+  - name: API Reference > Leaf User > Provider Credentials
+  - name: API Reference > Leaf User > Provider Credentials > ClimateFieldView
+  - name: API Reference > Leaf User > Provider Credentials > JohnDeere
+  - name: API Reference > Leaf User > Provider Credentials > Stara
+  - name: API Reference > Leaf User > Provider Credentials > Trimble
+  - name: API Reference > Leaf User > Provider Credentials > CNHi
+  - name: API Reference > Leaf User > Provider Credentials > Raven
+  - name: API Reference > Leaf User > Provider Credentials > RavenSlingshot
+  - name: API Reference > Leaf User > Provider Credentials > AgLeader
+  - name: API Reference > Leaf User > Provider Credentials > Sentera
+  - name: API Reference > Configurations
+  - name: API Reference > Configurations > Leaf User
+  - name: API Reference > Configurations > Api Owner
+  - name: API Reference > Field Boundary Management
+    description: >
+      Query Operations by Field
+
+      To query all operations that happened in a specific field (step 2), we
+      first need to create that field (step 1). Then, Leaf will automatically
+      detect operations of that field based on the operations' and on the
+      field's coordinates. This process usually takes about 30 minutes.
+
+      1. Create Field
+
+      Here we need to specify a leafUserId (that will be the Leaf User owner of
+      that field), a externalId (that will be the name we give to the field) and
+      the geojson geometry of the field (location). After creating the field we
+      can query it (step 2) 
+
+      2. Get operations' ids by Field
+
+      To query all operations that happened in a specific field, just update the
+      environment variable "field_external_id" to the field id you want to query
+      files
+  - name: API Reference > Field Boundary Management > Fields
+  - name: API Reference > Field Boundary Management > Boundaries
+  - name: API Reference > Field Boundary Management > Farms
+  - name: API Reference > Field Boundary Management > Growers
+  - name: API Reference > Field Boundary Management > Files
+  - name: API Reference > Machine File Conversion
+    description: >
+      Get Operation Files
+
+      1. Query & access all files
+
+      With this endpoint you can query all files of all your users (or you can
+      filter by user as well, or by provider, by operation_date and much more).
+      Select and update which params (filters) you want to apply before querying
+      files and just hit "send"
+
+      2. Query & access specific file
+
+      To query for a specific operation file, you just have to update the value
+      of the environment variable "file_id" and hit "send"
+  - name: API Reference > Field Operations
+  - name: API Reference > Crop Monitoring
+  - name: API Reference > Alerts
+    description: Register you server's URL to receive alerts from Leaf services.
+  - name: API Reference > Beta
+  - name: API Reference > Beta > Machines (Beta)
+  - name: API Reference > Beta > Prescription (Beta)
+  - name: API Reference > Beta > Prescription (Beta) > RavenSlingshot
+  - name: API Reference > Beta > Prescription (Beta) > ClimateFieldView
+  - name: API Reference > Beta > Prescription (Beta) > John Deere
+paths:
+  /api/authenticate:
+    post:
+      tags:
+        - API Reference > Leaf auth
+      summary: Get your Leaf Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: >-
+                {
+                  "username": "{{leaf_email}}",
+                  "password": "{{leaf_pass}}",
+                  "rememberMe": true
+                }
+
+                // if rememberMe = "true", your Leaf Token lasts 30 days. If
+                "false", your Leaf Token lasts 24h.
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/fields:
+    get:
+      tags:
+        - API Reference > Field Boundary Management > Fields
+      summary: Get all fields
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leafUserId
+          in: query
+          schema:
+            type: string
+          description: your Leaf User id
+          example: '{{leaf_user_id}}'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/files:
+    get:
+      tags:
+        - API Reference > Machine File Conversion
+      summary: Get all files
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/files/{file_id}:
+    get:
+      tags:
+        - API Reference > Machine File Conversion
+      summary: Get specific file by id
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: file_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/files/{file_id}/summary:
+    get:
+      tags:
+        - API Reference > Machine File Conversion
+      summary: Get file summary
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: file_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/files/{file_id}/images:
+    get:
+      tags:
+        - API Reference > Machine File Conversion
+      summary: Get file images
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: file_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/satellite/api/fields:
+    get:
+      tags:
+        - API Reference > Crop Monitoring
+      summary: Get all sat-monitored fields
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Crop Monitoring
+      summary: Create sat-monitored field
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                externalId: '{{sat_external_id}}'
+                daysBefore: 30
+                geometry:
+                  type: MultiPolygon
+                  coordinates:
+                    - - - - -89.84392762184143
+                          - 39.72439389620628
+                        - - -89.84388470649719
+                          - 39.71943436012731
+                        - - -89.83928203582764
+                          - 39.71951688444436
+                        - - -89.83936786651611
+                          - 39.725392361998416
+                        - - -89.84392762184143
+                          - 39.72439389620628
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/satellite/api/fields/{sat_external_id}/processes:
+    get:
+      tags:
+        - API Reference > Crop Monitoring
+      summary: Get sat images of field
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: size
+          in: query
+          schema:
+            type: integer
+          example: '30'
+        - name: sat_external_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /get_url:
+    post:
+      tags:
+        - API Reference > Providers auth > Trimble auth
+      summary: Get Trimble auth URL
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                application_name: '{{trimble_app_name}}'
+                client_id: '{{trimble_client_id}}'
+                client_redirect_url: '{{trimble_redirect_url}}'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /get_token:
+    post:
+      tags:
+        - API Reference > Providers auth > Trimble auth
+      summary: Get Trimble Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                client_id: '{{trimble_client_id}}'
+                redirect_url: '{{trimble_redirect_url}}'
+                client_secret: '{{trimble_client_secret}}'
+                code: '{{trimble_code}}'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /url:
+    post:
+      tags:
+        - API Reference > Providers auth > ClimateFieldView auth
+      summary: 1. Get CFV auth URL
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                client_id: '{{cfv_client_id}}'
+                redirect_uri: '{{cfv_redirect_url}}'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/oauth/token:
+    post:
+      tags:
+        - API Reference > Providers auth > ClimateFieldView auth
+      summary: 2. Get CFV Tokens
+      description: >-
+        Access token (and refresh token) request as detailed on step 4 of the
+        medium post
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                code:
+                  type: string
+                  description: get code from redirect url and put here
+                  example: '{{cfv_code}}'
+                redirect_uri:
+                  type: string
+                  description: 'same as when on the url you sent to user '
+                  example: '{{cfv_redirect_url}}'
+                grant_type:
+                  type: string
+                  example: authorization_code
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          description: Basic base64(clientId:clientSecret)
+          example: '{{cfv_auth_header}}'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /autenticacao_user:
+    post:
+      tags:
+        - API Reference > Providers auth > Stara auth
+      summary: Get Stara Tokens
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                user: '{{stara_username}}'
+                pwd: '{{stara_password}}'
+                tokenimp: '{{stara_api_key}}'
+      parameters:
+        - name: ''
+          in: header
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/climate-field-view-credentials:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > ClimateFieldView
+      summary: Get ClimateFieldView credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > ClimateFieldView
+      summary: Add ClimateFieldView credentials to the LeafUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                clientId: '{{cfv_client_id}}'
+                clientSecret: '{{cfv_client_secret}}'
+                apiKey: '{{cfv_api_key}}'
+                refreshToken: '{{cfv_refresh_token}}'
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > ClimateFieldView
+      summary: Delete ClimateFieldView credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/climate-field-view-credentials/events:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > ClimateFieldView
+      summary: Get ClimateFieldView credentials Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/john-deere-credentials:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > JohnDeere
+      summary: Get JohnDeere credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > JohnDeere
+      summary: Add JohnDeere credentials to the LeafUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                clientKey: '{{jd_client_id}}'
+                clientSecret: '{{jd_client_secret}}'
+                refreshToken: '{{jd_refresh_token}}'
+                clientEnvironment: '{jd_client_environment}'
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > JohnDeere
+      summary: Delete JohnDeere credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/john-deere-credentials/events:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > JohnDeere
+      summary: Get JohnDeere credentials Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/stara-credentials:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Stara
+      summary: Get Stara credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Stara
+      summary: Add Stara credentials to the LeafUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                apiKey: '{{stara_api_key}}'
+                accessToken: '{{stara_access_token}}'
+                accessTokenClient: '{{stara_access_token_client}}'
+                refreshToken: '{{stara_refresh_token}}'
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Stara
+      summary: Delete Stara credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/stara-credentials/events:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Stara
+      summary: Get Stara credentials Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/trimble-credentials:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Trimble
+      summary: Get Trimble credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Trimble
+      summary: Add Trimble credentials to the LeafUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                clientId: '{{trimble_client_id}}'
+                clientSecret: '{{trimble_client_secret}}'
+                refreshToken: '{{trimble_refresh_token}}'
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Trimble
+      summary: Delete Trimble credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/trimble-credentials/events:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Trimble
+      summary: Get Trimble credentials Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/cnhi-credentials:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > CNHi
+      summary: Get CNHi credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > CNHi
+      summary: Add CNHi credentials to LeafUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                clientId: '{{cnhi_client_id}}'
+                clientSecret: '{{cnhi_client_secret}}'
+                clientEnvironment: '{{cnhi_client_environment}}'
+                subscriptionKey: '{{cnhi_subscription_key}}'
+                refreshToken: '{{cnhi_refresh_token}}'
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > CNHi
+      summary: Delete CNHi credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/cnhi-credentials/events:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > CNHi
+      summary: Get CNHI credentials Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/raven-credentials:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Raven
+      summary: Get Raven credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Raven
+      summary: Add Raven credentials to the LeafUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                clientId: '{{raven_client_id}}'
+                clientSecret: '{{raven_client_secret}}'
+                refreshToken: '{{raven_refresh_token}}'
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Raven
+      summary: Delete Raven credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/raven-credentials/events:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Raven
+      summary: Get Raven credentials Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/raven-slingshot-credentials:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > RavenSlingshot
+      summary: Get RavenSlingshot credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > RavenSlingshot
+      summary: Add RavenSlingshot credentials to the LeafUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                apiKey: '{{ravenslingshot_api_key}}'
+                accessKey: '{{ravenslingshot_access_key}}'
+                sharedSecret: '{{ravenslingshot_shared_secret}}'
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > RavenSlingshot
+      summary: Delete RavenSlingshot credentials of the LeafUser
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/raven-slingshot-credentials/events:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > RavenSlingshot
+      summary: Get RavenSlingshot credentials Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/ag-leader-credentials:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > AgLeader
+      summary: Get AgLeader credentials from Leaf User
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > AgLeader
+      summary: Add AgLeader credentials to a Leaf User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                accessToken: '{{agleader_bearer_token}}'
+                refreshToken: '{{agleader_refresh_token}}'
+                publicKey: '{{agleader_public_key}}'
+                privateKey: '{{agleader_private_key}}'
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > AgLeader
+      summary: Delete AgLeader credentials from a Leaf User
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/ag-leader-credentials/events:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > AgLeader
+      summary: Get AgLeader credentials Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/sentera-credentials:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Sentera
+      summary: Get Sentera credentials from Leaf User
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Sentera
+      summary: Add Sentera credentials to a Leaf User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                username: '{{sentera_username}}'
+                password: '{{sentera_password}}'
+                organizationName: '{{sentera_organization_name}}'
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Sentera
+      summary: Delete Sentera credentials from a Leaf User
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}/sentera-credentials/events:
+    get:
+      tags:
+        - API Reference > Leaf User > Provider Credentials > Sentera
+      summary: Get Sentera credentials Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/:
+    get:
+      tags:
+        - API Reference > Leaf User
+      summary: Get all Leaf Users
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - API Reference > Leaf User
+      summary: Update Leaf User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                id: '{{leaf_user_id}}'
+                name: abc{{random_number}}
+                email: abc{{random_number}}@sharklasers.com
+                address: New York, NY 10004, US
+                phone: 123-456-7890
+                climateFieldViewCredentials:
+                  id: '{{cfv_credentials_id}}'
+                johnDeereCredentials:
+                  id: '{{jd_credentials_id}}'
+                cnhiCredentials:
+                  id: '{{cnhi_credentials_id}}'
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Leaf User
+      summary: Create Leaf User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Ada Lovelace{{random_number}}
+                email: AdaLovelace{{random_number}}@sharklasers.com
+                address: New York, NY 10004, US
+                phone: 123-456-7890
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/usermanagement/api/users/{leaf_user_id}:
+    get:
+      tags:
+        - API Reference > Leaf User
+      summary: Get specific Leaf User
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Leaf User
+      summary: Delete Leaf User
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/config/api/configs/{leaf_user_id}:
+    get:
+      tags:
+        - API Reference > Configurations > Leaf User
+      summary: Get leaf user config
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Configurations > Leaf User
+      summary: Create leaf user config
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                operationsImageCreation: false
+                geoimagesResolution: 0.00001
+                geoimagesShape: SQUARE
+                geoimagesProjection: EPSG:3857
+                geoimagesColorRamp:
+                  0%:
+                    - 200
+                    - 0
+                    - 0
+                  35%:
+                    - 255
+                    - 40
+                    - 0
+                  45%:
+                    - 255
+                    - 150
+                    - 0
+                  55%:
+                    - 255
+                    - 240
+                    - 0
+                  65%:
+                    - 0
+                    - 230
+                    - 0
+                  75%:
+                    - 0
+                    - 190
+                    - 0
+                  100%:
+                    - 0
+                    - 130
+                    - 0
+                  nv:
+                    - 0
+                    - 0
+                    - 0
+                    - 0
+                fieldsAutoSync: true
+                fieldsAttachIntersection: 0.01
+                fieldsMergeIntersection: 0.01
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+        - API Reference > Configurations > Leaf User
+      summary: Update leaf user config
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                operationsImageCreation: false
+                geoimagesResolution: 0.00001
+                geoimagesShape: ROUND
+                geoimagesProjection: EPSG:3857
+                geoimagesColorRamp:
+                  0%:
+                    - 200
+                    - 0
+                    - 0
+                  35%:
+                    - 255
+                    - 40
+                    - 0
+                  45%:
+                    - 255
+                    - 150
+                    - 0
+                  55%:
+                    - 255
+                    - 240
+                    - 0
+                  65%:
+                    - 0
+                    - 230
+                    - 0
+                  75%:
+                    - 0
+                    - 190
+                    - 0
+                  100%:
+                    - 0
+                    - 130
+                    - 0
+                  nv:
+                    - 0
+                    - 0
+                    - 0
+                    - 0
+                fieldsAutoSync: true
+                fieldsAttachIntersection: 0.01
+                fieldsMergeIntersection: 0.01
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Configurations > Leaf User
+      summary: Delete leaf user config
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/config/api/configs:
+    get:
+      tags:
+        - API Reference > Configurations > Api Owner
+      summary: Get default config
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+        - API Reference > Configurations > Api Owner
+      summary: Update default config
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                operationsImageCreation: false
+                geoimagesResolution: 0.00001
+                geoimagesShape: SQUARE
+                geoimagesProjection: EPSG:3857
+                geoimagesColorRamp:
+                  0%:
+                    - 200
+                    - 0
+                    - 0
+                  35%:
+                    - 255
+                    - 40
+                    - 0
+                  45%:
+                    - 255
+                    - 150
+                    - 0
+                  55%:
+                    - 255
+                    - 240
+                    - 0
+                  65%:
+                    - 0
+                    - 230
+                    - 0
+                  75%:
+                    - 0
+                    - 190
+                    - 0
+                  100%:
+                    - 0
+                    - 130
+                    - 0
+                  nv:
+                    - 0
+                    - 0
+                    - 0
+                    - 0
+                fieldsAutoSync: true
+                fieldsAttachIntersection: 0.01
+                fieldsMergeIntersection: 0.01
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/users/{leaf_user_id}/fields/{field_id}:
+    get:
+      tags:
+        - API Reference > Field Boundary Management > Fields
+      summary: Get a field
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: field_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Field Boundary Management > Fields
+      summary: Delete a field
+      description: >-
+        This will request to delete the field which its id is holded by variable
+        `field-1-id`. You can specify a different
+
+        field by replacing `{{field-1-id}}` in the URL below.
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: field_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+        - API Reference > Field Boundary Management > Fields
+      summary: Patch a field
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Sample Updated Name
+                farmId: 1
+                geometry:
+                  coordinates:
+                    - - - - -89.84392762184143
+                          - 39.72439389620629
+                        - - -89.84388470649719
+                          - 39.71943436012731
+                        - - -89.83928203582764
+                          - 39.71951688444436
+                        - - -89.83936786651611
+                          - 39.725392361998416
+                        - - -89.84392762184143
+                          - 39.72439389620629
+                  type: MultiPolygon
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: field_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/users/{leaf_user_id}/fields:
+    post:
+      tags:
+        - API Reference > Field Boundary Management > Fields
+      summary: Create a Field
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                geometry:
+                  coordinates:
+                    - - - - -89.84392762184143
+                          - 39.72439389620628
+                        - - -89.84388470649719
+                          - 39.71943436012731
+                        - - -89.83928203582764
+                          - 39.71951688444436
+                        - - -89.83936786651611
+                          - 39.725392361998416
+                        - - -89.84392762184143
+                          - 39.72439389620628
+                  type: MultiPolygon
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/fields/query/intersects:
+    post:
+      tags:
+        - API Reference > Field Boundary Management > Fields
+      summary: Get Fields by geometry
+      description: >-
+        If there are fields that intersect with the given geometry, they will be
+        returned.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                geometry:
+                  type: MultiPolygon
+                  coordinates:
+                    - - - - -89.84392762184143
+                          - 39.72439389620628
+                        - - -89.84388470649719
+                          - 39.71943436012731
+                        - - -89.83928203582764
+                          - 39.71951688444436
+                        - - -89.83936786651611
+                          - 39.725392361998416
+                        - - -89.84392762184143
+                          - 39.72439389620628
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/users/{leaf_user_id}/fields/intersect:
+    post:
+      tags:
+        - API Reference > Field Boundary Management > Fields
+      summary: Get intersection of fields
+      description: >-
+        If there are fields that intersect with the given geometry, they will be
+        returned.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: |+
+                ["{{field_id}}", "{{field_id}}"]
+
+                // ["field1 id", "field2 id", "fieldN id"]
+
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/users/{leaf_user_id}/fields/{field_id}/boundaries:
+    get:
+      tags:
+        - API Reference > Field Boundary Management > Boundaries
+      summary: Get all boundaries of a field
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: field_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/users/{leaf_user_id}/fields/{field_id}/boundaries/{boundary_id}:
+    get:
+      tags:
+        - API Reference > Field Boundary Management > Boundaries
+      summary: Get a boundary of a field
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: field_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: boundary_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/users/{leaf_user_id}/fields/{field_id}/boundary:
+    get:
+      tags:
+        - API Reference > Field Boundary Management > Boundaries
+      summary: Get active boundary of a field
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: field_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - API Reference > Field Boundary Management > Boundaries
+      summary: Update active boundary
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                geometry:
+                  coordinates:
+                    - - - - -89.84392762184143
+                          - 39.72439389620628
+                        - - -89.84388470649719
+                          - 39.71943436012731
+                        - - -89.83928203582764
+                          - 39.71951688444436
+                        - - -89.83936786651611
+                          - 39.725392361998416
+                        - - -89.84392762184143
+                          - 39.72439389620628
+                  type: MultiPolygon
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: field_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/farms:
+    get:
+      tags:
+        - API Reference > Field Boundary Management > Farms
+      summary: Get all farms
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/users/{leaf_user_id}/farms/{farm_id}:
+    get:
+      tags:
+        - API Reference > Field Boundary Management > Farms
+      summary: Get a farm
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: farm_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/growers:
+    get:
+      tags:
+        - API Reference > Field Boundary Management > Growers
+      summary: Get all growers
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/growers/{grower_id}:
+    get:
+      tags:
+        - API Reference > Field Boundary Management > Growers
+      summary: Get a grower
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: grower_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/users/{leaf_user_id}/fields/{field_id}/operations/{file_id}:
+    get:
+      tags:
+        - API Reference > Field Boundary Management > Files
+      summary: Get an operation of a field
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: field_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: file_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/fields/api/users/{leaf_user_id}/fields/{field_id}/operations:
+    get:
+      tags:
+        - API Reference > Field Boundary Management > Files
+      summary: Get all operations of a field
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: field_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/files/{file_id}/units:
+    get:
+      tags:
+        - API Reference > Machine File Conversion
+      summary: Get file units
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: file_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/batch:
+    post:
+      tags:
+        - API Reference > Machine File Conversion
+      summary: Upload operation file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: select your file
+                  format: binary
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leafUserId
+          in: query
+          schema:
+            type: string
+          example: '{{leaf_user_id}}'
+        - name: provider
+          in: query
+          schema:
+            type: string
+          example: Other
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/batch/{batch_id}:
+    get:
+      tags:
+        - API Reference > Machine File Conversion
+      summary: Get all batches
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: batch_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/files/merge:
+    post:
+      tags:
+        - API Reference > Machine File Conversion
+      summary: Merge operation files
+      description: |-
+        Make sure you are merging operations of the 
+        - same operationType (PLANTED, HARVESTED or APPLIED)
+        - same Leaf User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                ids:
+                  - '{{operation_1_id}}'
+                  - '{{operation_2_id}}'
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/operations:
+    get:
+      tags:
+        - API Reference > Field Operations
+      summary: Get all operations
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/operations/{operation_id}:
+    get:
+      tags:
+        - API Reference > Field Operations
+      summary: Get an operation
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: operation_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/operations/{operation_id}/summary:
+    get:
+      tags:
+        - API Reference > Field Operations
+      summary: Get an operation summary
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: operation_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/operations/{operation_id}/filteredGeojson:
+    get:
+      tags:
+        - API Reference > Field Operations
+      summary: Get an operation filteredGeojson
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: operation_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/operations/{operation_id}/standardGeojson:
+    get:
+      tags:
+        - API Reference > Field Operations
+      summary: Get an operation standardGeojson
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: operation_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/operations/{operation_id}/images:
+    get:
+      tags:
+        - API Reference > Field Operations
+      summary: Get an operation's images
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: operation_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/operations/{operation_id}/imagesV2:
+    get:
+      tags:
+        - API Reference > Field Operations
+      summary: Get an operation's images v2
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: operation_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/operations/{file_id}/units:
+    get:
+      tags:
+        - API Reference > Field Operations
+      summary: Get an operation's units
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: file_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/operations/{operation_id}/reprocess:
+    post:
+      tags:
+        - API Reference > Field Operations
+      summary: Reprocess an operation
+      requestBody:
+        content: {}
+      parameters:
+        - name: operation_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/operations/api/operations/CropOperationByField:
+    post:
+      tags:
+        - API Reference > Field Operations
+      summary: Crop operation by field
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                id: operationId
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/satellite/api/fields/{sat_external_id}:
+    get:
+      tags:
+        - API Reference > Crop Monitoring
+      summary: Get sat-monitored field geometry
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: sat_external_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Crop Monitoring
+      summary: Delete sat-monitored field
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: sat_external_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/satellite/api/fields/{sat_external_id}/history:
+    get:
+      tags:
+        - API Reference > Crop Monitoring
+      summary: Get sat-monitored field history dates
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: start
+          in: query
+          schema:
+            type: string
+          example: '2020-01-01'
+        - name: end
+          in: query
+          schema:
+            type: string
+          example: '2020-03-03'
+        - name: sat_external_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/alerts/api/alerts/webhooks:
+    post:
+      tags:
+        - API Reference > Alerts
+      summary: Register webhook
+      description: >-
+        Register the URL of your webhook, specifying which events do you want to
+        be alerted about.
+
+
+        The id of the resource created is returned in the Location header.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: listener of uploaded files
+                url: https://webhook.site/cf446e16-79ee-434d-9f59-cd64f2ae82ff
+                secret: <your secret, for auth>
+                events:
+                  - fieldCreated
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - API Reference > Alerts
+      summary: Get all webhooks
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/alerts/api/alerts/webhooks/{webhook_id}:
+    get:
+      tags:
+        - API Reference > Alerts
+      summary: Get webhook
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: webhook_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Alerts
+      summary: Get webhook Copy
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: webhook_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/beta/api/users/{leaf_user_id}/machines:
+    get:
+      tags:
+        - API Reference > Beta > Machines (Beta)
+      summary: Get all Machines
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Beta > Machines (Beta)
+      summary: Create Machine
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: string
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/beta/api/users/{leaf_user_id}/machines/{machine_id}:
+    get:
+      tags:
+        - API Reference > Beta > Machines (Beta)
+      summary: Get specific Machine
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: machine_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+        - API Reference > Beta > Machines (Beta)
+      summary: Update Machine
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: string
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: machine_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - API Reference > Beta > Machines (Beta)
+      summary: Delete Machine
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: machine_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/beta/api/users/{leaf_user_id}/machines/{machine_id}/files:
+    get:
+      tags:
+        - API Reference > Beta > Machines (Beta)
+      summary: Get all Machine Files
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: machine_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/beta/prescription/api/users/{leaf_user_id}/ravenSlingshot:
+    get:
+      tags:
+        - API Reference > Beta > Prescription (Beta) > RavenSlingshot
+      summary: Get RavenSlingshot prescription
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Beta > Prescription (Beta) > RavenSlingshot
+      summary: Upload RavenSlingshot prescription file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: Select your prescription file (zip file)
+                  format: binary
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: multipart/form-data
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/beta/prescription/api/users/{leaf_user_id}/climateFieldView:
+    post:
+      tags:
+        - API Reference > Beta > Prescription (Beta) > ClimateFieldView
+      summary: Upload ClimateFieldView prescription file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: Select your prescription file (zip file)
+                  format: binary
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: multipart/form-data
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/beta/prescription/api/users/{leaf_user_id}/johnDeere:
+    get:
+      tags:
+        - API Reference > Beta > Prescription (Beta) > John Deere
+      summary: Get John Deere prescriptions
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: organizationId
+          in: query
+          schema:
+            type: string
+          description: The id of the organization at JohnDeere
+          example: '{{jd_organization_id}}'
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - API Reference > Beta > Prescription (Beta) > John Deere
+      summary: Upload John Deere prescription files
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: Select your prescription file (zip file)
+                  format: binary
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: multipart/form-data
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{leaf_token}}
+        - name: organizationId
+          in: query
+          schema:
+            type: string
+          description: The id of the organization at JohnDeere
+          example: '{{jd_organization_id}}'
+        - name: leaf_user_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
